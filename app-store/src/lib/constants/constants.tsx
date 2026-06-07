@@ -1,0 +1,1 @@
+export const MINUTES_30 = 30 * 60000;
