@@ -7,23 +7,23 @@ import { api } from "../services/api";
 import { useSelector } from "react-redux";
 import { selectAuth } from "../store/slices/auth_slice";
 
-import type { Product } from "../types";
+import type { Courses } from "../types";
 
 import { formatCurrency } from "../utils";
 
 const url = "http://localhost:3001/api";
 
-interface ResponseSingleProduct {
-  data: Product;
+interface ResponseSingleCourse {
+  data: Courses;
 }
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useSelector(selectAuth);
 
-  const { data, isLoading, isError } = useQuery<ResponseSingleProduct>({
+  const { data, isLoading, isError } = useQuery<ResponseSingleCourse>({
     queryKey: ["product", id, isAuthenticated],
     queryFn: async () => {
-      const { data } = await api.get(`${url}/products/${id}`);
+      const { data } = await api.get(`${url}/courses/${id}`);
       return { data };
     },
     enabled: !!id,
@@ -54,7 +54,7 @@ export function ProductDetailPage() {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
         <p className="text-destructive mb-4">Produto não encontrado.</p>
-        <Link to="/products" className="text-primary hover:underline">
+        <Link to="/courses" className="text-primary hover:underline">
           Voltar aos cursos
         </Link>
       </div>
@@ -65,7 +65,7 @@ export function ProductDetailPage() {
     <div className="container mx-auto px-4 py-8">
       {/* Back Button */}
       <Link
-        to="/products"
+        to="/courses"
         className="inline-flex items-center gap-2 text-secondary hover:text-primary mb-8 transition-colors"
       >
         <ArrowLeft className="w-5 h-5" />

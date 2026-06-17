@@ -1,25 +1,25 @@
 import { memo } from "react";
 import { Link } from "react-router";
-import type { Product } from "../../types";
+import type { Courses } from "../../types";
 
 import { formatCurrency } from "../../utils";
 
-interface ProductCardProps {
-  product: Product;
+interface CourseCardProps {
+  course: Courses;
 }
 
-function ProductCardComponent({ product }: ProductCardProps) {
+function CourseCardComponent({ course }: CourseCardProps) {
 
 
   return (
     <div className="bg-gray-700 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
       <Link
-        to={`/products/${product.id}`}
+        to={`/courses/${course.id}`}
         className="block relative aspect-square overflow-hidden"
       >
         <img
-          src={product.imageURL}
-          alt={product.name}
+          src={course.imageURL}
+          alt={course.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           onError={(e) => {
             (e.target as HTMLImageElement).src = "NOT FOUND";
@@ -28,17 +28,17 @@ function ProductCardComponent({ product }: ProductCardProps) {
       </Link>
 
       <div className="p-4">
-        <Link to={`/products/${product.id}`}>
+        <Link to={`/courses/${course.id}`}>
           <h3 className="text-lg font-semibold text-pink-700 hover:text-primary transition-colors line-clamp-1">
-            {product.name}
+            {course.name}
           </h3>
         </Link>
         <p className="text-secondary text-sm mt-1 line-clamp-2">
-          {product.description}
+          {course.description}
         </p>
         <div className="flex items-center justify-between mt-4">
           <span className="text-xl font-bold text-primary">
-            {formatCurrency(product.price)}
+            {formatCurrency(course.price)}
           </span>
         </div>
       </div>
@@ -46,14 +46,14 @@ function ProductCardComponent({ product }: ProductCardProps) {
   );
 }
 
-export const ProductCard = memo(
-  ProductCardComponent,
+export const CourseCard = memo(
+  CourseCardComponent,
   (prevProps, nextProps) => {
     return (
-      prevProps.product.id === nextProps.product.id &&
-      prevProps.product.price === nextProps.product.price
+      prevProps.course.id === nextProps.course.id &&
+      prevProps.course.price === nextProps.course.price
     );
   },
 );
 
-export default ProductCard;
+export default CourseCard;

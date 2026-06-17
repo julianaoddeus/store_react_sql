@@ -18,16 +18,16 @@ export function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/products"
+              to="/courses"
               className="px-8 py-3 bg-pink-400 text-white rounded-lg font-medium hover:opacity-90 transition-colors"
             >
-              Ver Produtos
+              Ver Cursos
             </Link>
             <Link
-              to="/cart"
+              to="/enrollment"
               className="px-8 py-3 border-2 border-pink-400 text-pink-400 rounded-lg font-medium hover:text-pink-500 hover:border-pink-500 hover:bg-opacity-10  transition-colors"
             >
-              Explorar Suas Compras
+              Explorar Seus Cursos
             </Link>
           </div>
         </div>
@@ -44,10 +44,10 @@ export function Home() {
                 <ShoppingBag className="w-8 h-8 text-purple-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-500 mb-2">
-                Produtos de Qualidade
+                Cursos de Qualidade
               </h3>
               <p className="text-secondary">
-                Selecionamos os melhores produtos para você com garantia de
+                Selecionamos os melhores cursos para você com garantia de
                 qualidade.
               </p>
             </div>

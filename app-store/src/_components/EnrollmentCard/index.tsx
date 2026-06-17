@@ -1,29 +1,28 @@
 import { memo } from "react";
 
-import type { Course } from "../../types";
+import type { Courses } from "../../types";
 
-import { generateImageURL } from "../../lib/utils/generate-image-url";
 import { PlayCircle } from "lucide-react";
 
 interface CourseProps {
-  courses: Course[];
+  courses: Courses[];
 }
 
-function CoursesCardComponent({ courses }: CourseProps) {
+function EnrollmentCardComponent({ courses }: CourseProps) {
   const progress = 65; // %
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4 py-6">
       {courses.map((course) => (
         <div
-          key={course.product.id}
+          key={course.id}
           className="group flex flex-col bg-gray-900 rounded-xl overflow-hidden hover:bg-gray-800 transition-colors duration-200"
         >
           {/* Thumbnail */}
           <div className="relative w-full aspect-video overflow-hidden bg-gray-800">
             <img
-              src={generateImageURL(course.product.image?.url)}
-              alt={course.product.name}
+              src={course.imageURL}
+              alt={course.name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               onError={(e) => {
                 (e.target as HTMLImageElement).src =
@@ -58,7 +57,7 @@ function CoursesCardComponent({ courses }: CourseProps) {
             </div>
             <div className="flex flex-col min-w-0">
               <h3 className="text-sm font-semibold text-white line-clamp-2 leading-snug group-hover:text-pink-400 transition-colors">
-                {course.product.name}
+                {course.name}
               </h3>
             </div>
           </div>
@@ -68,8 +67,11 @@ function CoursesCardComponent({ courses }: CourseProps) {
   );
 }
 
-export const CourseCard = memo(CoursesCardComponent, (prevProps, nextProps) => {
-  return prevProps.courses === nextProps.courses;
-});
+export const EnrollmentCard = memo(
+  EnrollmentCardComponent,
+  (prevProps, nextProps) => {
+    return prevProps.courses === nextProps.courses;
+  },
+);
 
-export default CourseCard;
+export default EnrollmentCard;

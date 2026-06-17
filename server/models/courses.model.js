@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Products = sequelize.define(
-  "Product",
+const Courses = sequelize.define(
+  "Courses",
   {
     id: {
       type: DataTypes.UUID,
@@ -31,10 +31,10 @@ const Products = sequelize.define(
     },
   },
   {
-    tableName: "products",
+    tableName: "courses",
     createdAt: "created_at",
     updatedAt: false,
   },
 );
 
-module.exports = Products;
+module.exports = Courses;

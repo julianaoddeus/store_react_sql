@@ -67,9 +67,8 @@ A aplicação estará disponível em `http://localhost:5173`.
 | Rota            | Descrição            | Protegida  |
 ------------------------------------------------------
 | `/`             | Home                 | Não        |
-| `/products`     | Listagem de produtos | Não        |
-| `/products/:id` | Detalhe do produto   | Não        |
+| `/Courses`     | Listagem de produtos | Não        |
+| `/Courses/:id` | Detalhe do produto   | Não        |
 | `/login`        | Login                | Não        |
 | `/register`     | Cadastro             | Não        |
-| `/cart`         | Carrinho             | Sim        |
-| `/courses`      | Cursos               | Sim        |
+| `/enrollment`      | Cursos               | Sim        |

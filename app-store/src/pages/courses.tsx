@@ -1,119 +1,151 @@
-import {
-  BookOpen,
-  CheckCircle,
-  GraduationCap,
-  PartyPopper,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Search, Filter, X } from "lucide-react";
+import { api } from "../services/api";
+import CourseCard from "../_components/CourseCard";
+import type { ResponseCourses } from "../types";
+import { useDebounce } from "../hooks/usedebounce";
+import Pagination from "../_components/Pagination";
+import { MINUTES_30 } from "../lib/constants/constants";
 
-import CoursesCard from "../_components/CoursesCard";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch } from "../store";
-import { fetchCourses, selectCourses } from "../store/slices/course-slice";
+export function Courses() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const pageSize = 4;
 
-const CoursesPage = () => {
-  const [showSuccess] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  const { items } = useSelector(selectCourses);
+  const debouncedSearch = useDebounce<string>(searchTerm, 500);
 
-  useEffect(() => {
-    dispatch(fetchCourses());
-  }, [dispatch]);
+  const { data, isLoading, isError } = useQuery<ResponseCourses>({
+    queryKey: ["courses", page, debouncedSearch],
+    queryFn: async () => {
+      let url = `http://localhost:3001/api/courses?page=${page}&pageSize=${pageSize}`;
+
+      if (debouncedSearch) {
+        url += `&search=${debouncedSearch}`;
+      }
+
+      const { data } = await api.get(url);    
+      return data;
+    },
+
+    staleTime: MINUTES_30,
+    placeholderData: (previousData) => previousData,
+  });
+
+  const courses = data?.data;
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setPage(1);
+  };
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory(null);
+  };
+
+  if (isError) {
+    return (
+      <div className="container mx-auto px-4 py-12 text-center">
+        <p className="text-destructive">
+          Erro ao carregar cursos. Tente novamente.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-background">
-      {items.length > 0 ? (
-        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          {/* Success Banner */}
-          {showSuccess && (
-            <div className="mb-8 rounded-xl border border-primary/30 bg-primary/10 p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary">
-                  <PartyPopper className="h-6 w-6 text-primary-foreground" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-foreground">
-                    Compra realizada com sucesso!
-                  </h2>
-                  <p className="mt-1 text-muted-foreground">
-                    Parabéns! Seus cursos já estão disponíveis. Comece a
-                    aprender agora mesmo!
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+    <div className="container mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-foreground mb-2">Cursos</h1>
+        <p className="text-secondary">Explore nossa seleção de cursos</p>
+      </div>
 
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground">Meus Cursos</h1>
-            <p className="mt-2 text-muted-foreground">
-              Acompanhe seu progresso e continue aprendendo
-            </p>
-          </div>
+      {/* Filters Bar */}
+      <div className="flex flex-col md:flex-row gap-4 mb-8">
+        {/* Search */}
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary" />
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Buscar cursos..."
+            className="w-full pl-10 pr-4 py-3 bg-transparent border border-muted rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+          />
+        </div>
 
-          <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20">
-                <BookOpen className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground"></p>
-                <p className="text-2xl font-bold text-foreground">
-                  {" "}
-                  {items.length}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Cursos adquiridos
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20">
-                <GraduationCap className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground">60</p>
-                <p className="text-sm text-muted-foreground">Total de aulas</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/20">
-                <CheckCircle className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground">70%</p>
-                <p className="text-sm text-muted-foreground">
-                  Aulas concluídas
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* Category Filter Button */}
+        <div className="relative">
+          <button
+            className={`flex items-center gap-2 px-4 py-3 border rounded-lg transition-colors ${
+              selectedCategory
+                ? "border-primary bg-blue-50 text-primary"
+                : "border-muted hover:border-primary"
+            }`}
+          >
+            <Filter className="w-5 h-5" />
+          </button>
+        </div>
 
-          {/* Courses List */}
-          <CoursesCard courses={items} />
-        </main>
-      ) : (
-        <div className="container mx-auto px-4 py-12">
-          <div className="max-w-md mx-auto text-center">
-            <h1 className="text-2xl font-bold text-gray-600 mb-2">
-              Você ainda não tem cursos
-            </h1>
-            <p className="text-secondary mb-6">
-              Explore nossos cursos e adicione ao seu carrinho.
-            </p>
-            <Link
-              to="/products"
-              className="inline-block px-8 py-3 border-2 border-pink-400 text-pink-400 rounded-lg font-medium hover:text-pink-500 hover:border-pink-500 hover:bg-opacity-10  transition-colors"
+        {/* Clear Filters */}
+        {searchTerm && (
+          <button
+            onClick={clearFilters}
+            className="flex items-center gap-2 px-4 py-3 text-destructive hover:bg-red-50 rounded-lg transition-colors"
+          >
+            <X className="w-5 h-5" />
+            Limpar filtros
+          </button>
+        )}
+      </div>
+
+      {/* Results count */}
+      <p className="text-secondary mb-4">
+        {courses?.length} produto(s) encontrado(s)
+      </p>
+
+      {/* Courses Grid */}
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-xl shadow-sm overflow-hidden animate-pulse"
             >
-              Ver cursos disponíeis
-            </Link>
-          </div>
+              <div className="aspect-square bg-muted" />
+              <div className="p-4 space-y-3">
+                <div className="h-5 bg-muted rounded w-3/4" />
+                <div className="h-4 bg-muted rounded w-full" />
+                <div className="h-6 bg-muted rounded w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : courses && courses.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {courses.map((course) => (
+            <CourseCard key={course.id} course={course} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-secondary text-lg">Nenhum produto encontrado.</p>
+          <button
+            onClick={clearFilters}
+            className="mt-4 text-primary hover:underline"
+          >
+            Limpar filtros e ver todos
+          </button>
         </div>
       )}
+
+      {/* Pagination */}
+      <Pagination page={page} meta={data?.meta} setPage={setPage} />
     </div>
   );
-};
+}
 
-export default CoursesPage;
+export default Courses;

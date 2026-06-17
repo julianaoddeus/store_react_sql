@@ -4,9 +4,9 @@ import Layout from "../_components/Layout";
 import Home from "../pages/home";
 import Register from "../pages/register";
 import Login from "../pages/login";
-import Products from "../pages/products";
-import ProductDetailPage from "../pages/product-datails";
-import CoursesPage from "../pages/courses";
+import { Courses } from "../pages/courses";
+import ProductDetailPage from "../pages/courses-datails";
+import EnrollmentPage from "../pages/enrollment";
 
 export const Routers = () => {
   return (
@@ -15,11 +15,11 @@ export const Routers = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/courses/:id" element={<ProductDetailPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/enrollment" element={<EnrollmentPage />} />
         </Route>
       </Route>
     </Routes>

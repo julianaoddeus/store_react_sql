@@ -1,5 +1,5 @@
-export interface ResponseProducts {
-  data: Product[];
+export interface ResponseCourses {
+  data: Courses[];
   meta: {
     pagination: {
       page: number;
@@ -10,8 +10,8 @@ export interface ResponseProducts {
   };
 }
 
-export interface Product {
-  id: number;  
+export interface Courses {
+  id: number;
   name: string;
   description: string;
   price: number;
@@ -30,25 +30,15 @@ export interface AuthResponse {
   user: User;
 }
 
-export interface ResponseCourses {
-  data: Course[];
+export interface ResponseEnrollment {
+  data: Enrollment[];
 }
 
-export interface Course {
-  id: string;  
-  progress: number;
-  inicialDate: Date;
-  durationInMonths: number;
-  expiresAt: Date;
-  product: {  
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    duration: number;
-    image?: {
-      url: string;
-    };
-  };
+export interface Enrollment {
+  id: number;
+  userId: number;
+  courseId: number;
+  enrolledAt: Date;
+  status: "ATIVO" | "CANCELADO";
+  cancelledAt?: Date;
 }

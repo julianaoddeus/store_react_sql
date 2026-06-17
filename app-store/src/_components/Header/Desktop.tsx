@@ -25,7 +25,7 @@ export function Desktop({
     toast.success("Logout realizado com sucesso!");
     onCloseMenu();
   };
- 
+
   return (
     <>
       <nav className="hidden md:flex items-center gap-6">
@@ -36,13 +36,13 @@ export function Desktop({
           Home
         </Link>
         <Link
-          to="/products"
+          to="/courses"
           className="text-gray-500 hover:text-pink-500 transition-colors"
         >
           Cursos
         </Link>
         <Link
-          to="/courses"
+          to="/enrollment"
           className="text-gray-500 hover:text-pink-500 transition-colors"
         >
           Meus Cursos
@@ -50,7 +50,7 @@ export function Desktop({
       </nav>
       <div className="hidden md:flex items-center gap-4">
         {isAuthenticated ? (
-          <>            
+          <>
             <div className="flex items-center gap-2">
               <UserIcon className="w-5 h-5 text-secondary" />
               <span className="text-sm text-secondary">

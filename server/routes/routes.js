@@ -3,7 +3,7 @@ const router = express.Router();
 
 const authController = require("../controllers/authController");
 const usersController = require("../controllers/usersController");
-const productsController = require("../controllers/productsController");
+const coursesController = require("../controllers/coursesController");
 
 // auth
 router.post("/login", authController.login);
@@ -14,8 +14,8 @@ router.post("/users", usersController.addUser);
 router.put("/users/:id", usersController.updateUser);
 router.delete("/users/:id", usersController.removeUser);
 
-// products
-router.get("/products", productsController.getProducts);
-router.get("/products/:id", productsController.getProduct);
+// Courses
+router.get("/courses", coursesController.getCourses);
+router.get("/courses/:id", coursesController.getCourse);
 
 module.exports = router;

@@ -42,14 +42,14 @@ export function Mobile({
               Home
             </Link>
             <Link
-              to="/products"
+              to="/courses"
               onClick={onToggleMenu}
               className="px-4 py-2 text-gray-500 hover:text-pink-500 rounded-lg"
             >
               Cursos
             </Link>
             <Link
-              to="/courses"
+              to="/enrollment"
               className="text-gray-500 hover:text-pink-500 transition-colors"
             >
               Meus Cursos
