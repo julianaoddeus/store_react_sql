@@ -6,7 +6,7 @@ async function getAllProducts({ page = 1, pageSize = 10, search = "" } = {}) {
   const where = search
     ? {
         [Op.or]: [
-          { title: { [Op.iLike]: `%${search}%` } },
+          { name: { [Op.iLike]: `%${search}%` } },
           { description: { [Op.iLike]: `%${search}%` } },
         ],
       }

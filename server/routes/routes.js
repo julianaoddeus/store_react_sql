@@ -16,5 +16,6 @@ router.delete("/users/:id", usersController.removeUser);
 
 // products
 router.get("/products", productsController.getProducts);
+router.get("/products/:id", productsController.getProduct);
 
 module.exports = router;

@@ -1,7 +1,6 @@
-import { useState, useCallback } from "react";
 import { useParams, Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ShoppingCart, Plus, Minus } from "lucide-react";
+import { ArrowLeft, GraduationCap  } from "lucide-react";
 
 import { api } from "../services/api";
 
@@ -18,10 +17,8 @@ interface ResponseSingleProduct {
   data: Product;
 }
 export function ProductDetailPage() {
-
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useSelector(selectAuth);
-  const [quantity, setQuantity] = useState(1);
 
   const { data, isLoading, isError } = useQuery<ResponseSingleProduct>({
     queryKey: ["product", id, isAuthenticated],
@@ -31,18 +28,8 @@ export function ProductDetailPage() {
     },
     enabled: !!id,
   });
-  
-  
+
   const product = data?.data;
- 
-
-  const incrementQuantity = useCallback(() => {
-    setQuantity((prev) => prev + 1);
-  }, []);
-
-  const decrementQuantity = useCallback(() => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
-  }, []);
 
   if (isLoading) {
     return (
@@ -89,7 +76,7 @@ export function ProductDetailPage() {
         {/* Product Image */}
         <div className="aspect-square rounded-xl overflow-hidden bg-gray-700 shadow-sm">
           <img
-            src={product?.imageURL}
+            src={product.imageURL}
             alt={product?.name}
             className="w-full h-full object-cover"
           />
@@ -108,53 +95,21 @@ export function ProductDetailPage() {
           <div className="text-3xl font-bold text-primary mb-8">
             {formatCurrency(product?.price)}
           </div>
-
-          {/* Quantity Selector */}
-          <div className="flex items-center gap-4 mb-6">
-            <span className="text-foreground font-medium">Quantidade:</span>
-            <div className="flex items-center border border-muted rounded-lg">
-              <button
-                onClick={decrementQuantity}
-                className="p-3 hover:bg-muted transition-colors"
-                aria-label="Diminuir quantidade"
-              >
-                <Minus className="w-5 h-5" />
-              </button>
-              <span className="px-6 py-3 font-semibold text-lg">
-                {quantity}
-              </span>
-              <button
-                onClick={incrementQuantity}
-                className="p-3 hover:bg-muted transition-colors"
-                aria-label="Aumentar quantidade"
-              >
-                <Plus className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Total */}
-          <div className="bg-muted rounded-lg p-4 mb-6">
-            <div className="flex justify-between items-center">
-              <span className="text-secondary">Total:</span>
-              <span className="text-2xl font-bold text-foreground">
-                {formatCurrency(product?.price * quantity)}
-              </span>
-            </div>
-          </div>
+         
+         
 
           {/* Add to Cart Button */}
           {isAuthenticated ? (
             <button className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg">
-              <ShoppingCart className="w-6 h-6" />
-              Adicionar ao Carrinho
+              <GraduationCap  className="w-6 h-6" />
+              Fazer inscrição
             </button>
           ) : (
             <p className="text-center text-secondary mt-4">
               <Link to="/login" className="text-primary hover:underline">
                 Faça login
               </Link>{" "}
-              para adicionar ao carrinho
+              para para poder se inscrever
             </p>
           )}
         </div>
