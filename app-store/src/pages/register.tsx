@@ -3,15 +3,10 @@ import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { toast } from "react-toastify";
-import { useAppDispatch } from "../store";
-import type { AuthResponse } from "../types";
 import { useMutation } from "@tanstack/react-query";
-import { setCredentials } from "../store/slices/auth_slice";
 import { api } from "../services/api";
 
 export function Register() {
-  const dispatch = useAppDispatch();
-
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,18 +18,19 @@ export function Register() {
 
   const registerMutation = useMutation({
     mutationFn: async () => {
-      const response = await api.post<AuthResponse>("/auth/local/register", {
+      const response = await api.post("http://localhost:3001/api/users/add", {
         username,
         email,
         password,
       });
       return response.data;
     },
-    onSuccess: (data) => {
-      dispatch(setCredentials({ user: data.user, token: data.jwt }));
-      
+    onSuccess: () => {
       toast.success("Cadastro realizado com sucesso!");
-      navigate("/", { replace: true });
+      navigate("/login", { replace: true });
+    },
+    onError: () => {
+      toast.error("Erro ao cadastrar. Tente novamente.");
     },
   });
 

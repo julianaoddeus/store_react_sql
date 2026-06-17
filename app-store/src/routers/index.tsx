@@ -6,7 +6,6 @@ import Register from "../pages/register";
 import Login from "../pages/login";
 import Products from "../pages/products";
 import ProductDetailPage from "../pages/product-datails";
-import CartPage from "../pages/cart";
 import CoursesPage from "../pages/courses";
 
 export const Routers = () => {
@@ -17,10 +16,9 @@ export const Routers = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/products/:documentId" element={<ProductDetailPage />} />
+        <Route path="/products/:id" element={<ProductDetailPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/cart" element={<CartPage />} />
           <Route path="/courses" element={<CoursesPage />} />
         </Route>
       </Route>

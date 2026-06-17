@@ -1,14 +1,7 @@
-import { memo, useCallback, useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { ShoppingCart, Plus } from "lucide-react";
-
+import { memo } from "react";
+import { Link } from "react-router";
 import type { Product } from "../../types";
-import { useSelector } from "react-redux";
-import { selectAuth } from "../../store/slices/auth_slice";
-import { useAppDispatch } from "../../store";
-import { toast } from "react-toastify";
-import { addCartItemAsync } from "../../store/slices/cart-slice";
-import { generateImageURL } from "../../lib/utils/generate-image-url";
+
 import { formatCurrency } from "../../utils";
 
 interface ProductCardProps {
@@ -16,34 +9,17 @@ interface ProductCardProps {
 }
 
 function ProductCardComponent({ product }: ProductCardProps) {
-  const { isAuthenticated } = useSelector(selectAuth);
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const [quantity] = useState(1);
 
-  const imageURL = generateImageURL(product?.image?.url);
-
-  const handleAddToCart = useCallback(async () => {
-    if (!product) return;
-
-    if (!isAuthenticated) {
-      toast.warn("Faça login para adicionar ao carrinho!");
-      return navigate("/login");
-    }
-
-    await dispatch(addCartItemAsync({ product, quantity })).unwrap();
-    toast.success(`${quantity} - ${product.title} adicionado(s) ao carrinho!`);
-  }, [dispatch, product, quantity, isAuthenticated, navigate]);
 
   return (
     <div className="bg-gray-700 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
       <Link
-        to={`/products/${product.documentId}`}
+        to={`/products/${product.id}`}
         className="block relative aspect-square overflow-hidden"
       >
         <img
-          src={imageURL}
-          alt={product.title}
+          src={product.imageURL}
+          alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           onError={(e) => {
             (e.target as HTMLImageElement).src = "NOT FOUND";
@@ -52,9 +28,9 @@ function ProductCardComponent({ product }: ProductCardProps) {
       </Link>
 
       <div className="p-4">
-        <Link to={`/products/${product.documentId}`}>
+        <Link to={`/products/${product.id}`}>
           <h3 className="text-lg font-semibold text-pink-700 hover:text-primary transition-colors line-clamp-1">
-            {product.title}
+            {product.name}
           </h3>
         </Link>
         <p className="text-secondary text-sm mt-1 line-clamp-2">
@@ -64,14 +40,6 @@ function ProductCardComponent({ product }: ProductCardProps) {
           <span className="text-xl font-bold text-primary">
             {formatCurrency(product.price)}
           </span>
-          <button
-            onClick={handleAddToCart}
-            className="flex items-center gap-1 px-3 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors"
-            aria-label={`Adicionar ${product.title} ao carrinho`}
-          >
-            <ShoppingCart className="w-4 h-4" />
-            <Plus className="w-4 h-4" />
-          </button>
         </div>
       </div>
     </div>

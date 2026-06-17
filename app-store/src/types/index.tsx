@@ -11,15 +11,12 @@ export interface ResponseProducts {
 }
 
 export interface Product {
-  id: number;
-  documentId: string;
-  title: string;
+  id: number;  
+  name: string;
   description: string;
   price: number;
   stock: number;
-  image?: {
-    url: string;
-  };
+  imageURL: string;
 }
 
 export interface User {
@@ -33,43 +30,19 @@ export interface AuthResponse {
   user: User;
 }
 
-export interface CartItem {
-  id: number;
-  documentId: string;
-  quantity: number;
-  product: {
-    id: number;
-    documentId: string;
-    title: string;
-    description: string;
-    price: number;
-    stock: number;
-    duration: number;
-    image?: {
-      url: string;
-    };
-  };
-}
-
-export interface ResponseCartItems {
-  data: CartItem[];
-}
-
 export interface ResponseCourses {
   data: Course[];
 }
 
 export interface Course {
-  id: number;
-  documentId: string;  
+  id: string;  
   progress: number;
   inicialDate: Date;
   durationInMonths: number;
   expiresAt: Date;
-  product: {
-    id: number;
-    documentId: string;
-    title: string;
+  product: {  
+    id: string;
+    name: string;
     description: string;
     price: number;
     stock: number;

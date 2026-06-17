@@ -12,21 +12,20 @@ export function Products() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [page, setPage] = useState<number>(1);
-  const pageSize = 2;
+  const pageSize = 4;
 
   const debouncedSearch = useDebounce<string>(searchTerm, 500);
 
   const { data, isLoading, isError } = useQuery<ResponseProducts>({
     queryKey: ["products", page, debouncedSearch],
     queryFn: async () => {
-      let url = `/products?populate=image&pagination[page]=${page}&pagination[pageSize]=${pageSize}`;
+      let url = `http://localhost:3001/api/products?page=${page}&pageSize=${pageSize}`;
 
       if (debouncedSearch) {
-        url += `&filters[$or][0][title][$containsi]=${debouncedSearch}`;
-        url += `&filters[$or][1][description][$containsi]=${debouncedSearch}`;
+        url += `&search=${debouncedSearch}`;
       }
 
-      const { data } = await api.get(url);
+      const { data } = await api.get(url);    
       return data;
     },
 
@@ -128,7 +127,7 @@ export function Products() {
       ) : products && products.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => (
-            <ProductCard key={product.documentId} product={product} />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       ) : (

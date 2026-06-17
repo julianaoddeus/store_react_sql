@@ -41,8 +41,8 @@ cp .env.example .env   # configure as variáveis de ambiente
 npm run dev
 ```
 
-O servidor estará disponível em `http://localhost:1337`.  
-O painel admin do Strapi em `http://localhost:1337/admin`.
+O servidor estará disponível em `http://localhost:3001`.  
+O painel admin do Strapi em `http://localhost:3001/admin`.
 
 ### Frontend
 

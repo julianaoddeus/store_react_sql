@@ -15,6 +15,7 @@ export function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   const location = useLocation();
+  const url = "http://localhost:3001/api";
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -23,15 +24,17 @@ export function Login() {
 
   const loginMutation = useMutation({
     mutationFn: async () => {
-      const response = await api.post<AuthResponse>("/auth/local", {
-        identifier,
+      const response = await api.post<AuthResponse>(`${url}/login`, {
+        email: identifier,
         password,
       });
+
       return response.data;
     },
-    onSuccess: (data) => {      
+    onSuccess: (data) => {
       dispatch(setCredentials({ user: data.user, token: data.jwt }));
 
+      console.log('data', data)
       toast.success(`Bem-vindo de volta, ${data.user.username}!`);
       navigate(from, { replace: true });
     },
@@ -40,7 +43,7 @@ export function Login() {
     },
   });
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {   
     setIdentifier(e.target.value);
   };
 

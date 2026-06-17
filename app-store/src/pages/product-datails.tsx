@@ -1,43 +1,40 @@
 import { useState, useCallback } from "react";
-import { useParams, Link, useNavigate } from "react-router";
+import { useParams, Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ShoppingCart, Plus, Minus } from "lucide-react";
 
-import { toast } from "react-toastify";
 import { api } from "../services/api";
 
 import { useSelector } from "react-redux";
 import { selectAuth } from "../store/slices/auth_slice";
-import { useAppDispatch } from "../store";
-import { addCartItemAsync } from "../store/slices/cart-slice";
+
 import type { Product } from "../types";
-import { generateImageURL } from "../lib/utils/generate-image-url";
+
 import { formatCurrency } from "../utils";
+
+const url = "http://localhost:3001/api";
 
 interface ResponseSingleProduct {
   data: Product;
 }
-
 export function ProductDetailPage() {
-  const { documentId } = useParams<{ documentId: string }>();
+
+  const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useSelector(selectAuth);
   const [quantity, setQuantity] = useState(1);
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const { data, isLoading, isError } = useQuery<ResponseSingleProduct>({
-    queryKey: ["product", documentId, isAuthenticated],
+    queryKey: ["product", id, isAuthenticated],
     queryFn: async () => {
-      const { data } = await api.get(
-        `/products/${documentId}?populate=image&fields=*`,
-      );
-      return data;
+      const { data } = await api.get(`${url}/products/${id}`);
+      return { data };
     },
-    enabled: !!documentId,
+    enabled: !!id,
   });
-
+  
+  
   const product = data?.data;
-  const imageURL = generateImageURL(product?.image?.url);
+ 
 
   const incrementQuantity = useCallback(() => {
     setQuantity((prev) => prev + 1);
@@ -46,18 +43,6 @@ export function ProductDetailPage() {
   const decrementQuantity = useCallback(() => {
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
   }, []);
-
-  const handleAddToCart = useCallback(() => {
-    if (!product) return;
-
-    if (!isAuthenticated) {
-      toast.warn("Faça login para adicionar ao carrinho!");
-      return navigate("/login");
-    }
-
-    dispatch(addCartItemAsync({ product, quantity }));
-    toast.success(`${quantity} - ${product.title} adicionado(s) ao carrinho!`);
-  }, [dispatch, product, quantity, isAuthenticated, navigate]);
 
   if (isLoading) {
     return (
@@ -104,8 +89,8 @@ export function ProductDetailPage() {
         {/* Product Image */}
         <div className="aspect-square rounded-xl overflow-hidden bg-gray-700 shadow-sm">
           <img
-            src={imageURL}
-            alt={product?.title}
+            src={product?.imageURL}
+            alt={product?.name}
             className="w-full h-full object-cover"
           />
         </div>
@@ -113,7 +98,7 @@ export function ProductDetailPage() {
         {/* Product Info */}
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold text-pink-700 mb-4">
-            {product?.title}
+            {product?.name}
           </h1>
 
           <p className="text-secondary leading-relaxed mb-6">
@@ -160,10 +145,7 @@ export function ProductDetailPage() {
 
           {/* Add to Cart Button */}
           {isAuthenticated ? (
-            <button
-              onClick={handleAddToCart}
-              className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg"
-            >
+            <button className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg">
               <ShoppingCart className="w-6 h-6" />
               Adicionar ao Carrinho
             </button>

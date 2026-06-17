@@ -1,0 +1,21 @@
+node_modules
+.env
+*.log
+.DS_Store
+.pnotes
+
+# Banco de dados local
+*.sqlite
+*.sqlite3
+*.db
+
+# Uploads / imagens enviadas
+public/images/*
+!public/images/.gitkeep
+
+# Build
+dist
+
+
+
+
