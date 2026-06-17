@@ -35,4 +35,18 @@ async function getCourseById(id) {
   return Courses.findByPk(id);
 }
 
-module.exports = { getAllCourses, getCourseById };
+async function getCourseByEnrollment(userId) {
+  return Course.findAndCountAll({
+    include: [
+      {
+        model: Enrollment,
+        as: "enrollments",
+        where: {
+          userId,
+        },
+      },
+    ],
+  });
+}
+
+module.exports = { getAllCourses, getCourseById, getCourseByEnrollment };

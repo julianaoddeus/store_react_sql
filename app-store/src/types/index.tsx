@@ -30,11 +30,19 @@ export interface AuthResponse {
   user: User;
 }
 
-export interface ResponseEnrollment {
-  data: Enrollment[];
+export interface ResponseEnrollments {
+  data: Enrollments[];
+  meta: {
+    pagination: {
+      page: number;
+      pageCount: number;
+      pageSize: number;
+      total: number;
+    };
+  };
 }
 
-export interface Enrollment {
+export interface Enrollments {
   id: number;
   userId: number;
   courseId: number;

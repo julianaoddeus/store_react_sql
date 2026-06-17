@@ -4,22 +4,29 @@ import {
   GraduationCap,
   PartyPopper,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router";
 
 import EnrollmentCard from "../_components/EnrollmentCard";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch } from "../store";
-import { fetchCourses, selectCourses } from "../store/slices/course-slice";
+import { useSelector } from "react-redux";
+import { selectAuth } from "../store/slices/auth_slice";
+import { api } from "../services/api";
+import { useQuery } from "@tanstack/react-query";
+import type { ResponseCourses } from "../types";
 
 const EnrollmentPage = () => {
+  const { isAuthenticated } = useSelector(selectAuth);
   const [showSuccess] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  const { items } = useSelector(selectCourses);
 
-  useEffect(() => {
-    dispatch(fetchCourses());
-  }, [dispatch]);
+  const { data } = useQuery<ResponseCourses>({
+    queryKey: ["enrollment", isAuthenticated],
+    queryFn: async () => {
+      const { data } = await api.get("/enrollment");
+      return data;
+    },
+  });
+
+  const items = data?.data ?? [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -59,9 +66,7 @@ const EnrollmentPage = () => {
                 <BookOpen className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground"></p>
                 <p className="text-2xl font-bold text-foreground">
-                  {" "}
                   {items.length}
                 </p>
                 <p className="text-sm text-muted-foreground">
@@ -101,13 +106,13 @@ const EnrollmentPage = () => {
               Você ainda não tem cursos
             </h1>
             <p className="text-secondary mb-6">
-              Explore nossos cursos e adicione ao seu carrinho.
+              Explore nossos cursos e se inscreva.
             </p>
             <Link
               to="/courses"
-              className="inline-block px-8 py-3 border-2 border-pink-400 text-pink-400 rounded-lg font-medium hover:text-pink-500 hover:border-pink-500 hover:bg-opacity-10  transition-colors"
+              className="inline-block px-8 py-3 border-2 border-pink-400 text-pink-400 rounded-lg font-medium hover:text-pink-500 hover:border-pink-500 hover:bg-opacity-10 transition-colors"
             >
-              Ver cursos disponíeis
+              Ver cursos disponíveis
             </Link>
           </div>
         </div>

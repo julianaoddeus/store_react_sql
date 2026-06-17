@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, GraduationCap  } from "lucide-react";
+import { ArrowLeft, GraduationCap } from "lucide-react";
 
 import { api } from "../services/api";
 
@@ -16,12 +16,12 @@ const url = "http://localhost:3001/api";
 interface ResponseSingleCourse {
   data: Courses;
 }
-export function ProductDetailPage() {
+export function CourseDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useSelector(selectAuth);
 
   const { data, isLoading, isError } = useQuery<ResponseSingleCourse>({
-    queryKey: ["product", id, isAuthenticated],
+    queryKey: ["course", id, isAuthenticated],
     queryFn: async () => {
       const { data } = await api.get(`${url}/courses/${id}`);
       return { data };
@@ -29,7 +29,7 @@ export function ProductDetailPage() {
     enabled: !!id,
   });
 
-  const product = data?.data;
+  const course = data?.data;
 
   if (isLoading) {
     return (
@@ -50,10 +50,10 @@ export function ProductDetailPage() {
     );
   }
 
-  if (isError || !product) {
+  if (isError || !course) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
-        <p className="text-destructive mb-4">Produto não encontrado.</p>
+        <p className="text-destructive mb-4">Curso não encontrado.</p>
         <Link to="/courses" className="text-primary hover:underline">
           Voltar aos cursos
         </Link>
@@ -73,35 +73,33 @@ export function ProductDetailPage() {
       </Link>
 
       <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-        {/* Product Image */}
+        {/* course Image */}
         <div className="aspect-square rounded-xl overflow-hidden bg-gray-700 shadow-sm">
           <img
-            src={product.imageURL}
-            alt={product?.name}
+            src={course.imageURL}
+            alt={course?.name}
             className="w-full h-full object-cover"
           />
         </div>
 
-        {/* Product Info */}
+        {/* course Info */}
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold text-pink-700 mb-4">
-            {product?.name}
+            {course?.name}
           </h1>
 
           <p className="text-secondary leading-relaxed mb-6">
-            {product?.description}
+            {course?.description}
           </p>
 
           <div className="text-3xl font-bold text-primary mb-8">
-            {formatCurrency(product?.price)}
+            {formatCurrency(course?.price)}
           </div>
-         
-         
 
           {/* Add to Cart Button */}
           {isAuthenticated ? (
             <button className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg">
-              <GraduationCap  className="w-6 h-6" />
+              <GraduationCap className="w-6 h-6" />
               Fazer inscrição
             </button>
           ) : (
@@ -118,4 +116,4 @@ export function ProductDetailPage() {
   );
 }
 
-export default ProductDetailPage;
+export default CourseDetailPage;

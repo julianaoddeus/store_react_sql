@@ -11,10 +11,18 @@ async function getCourses(req, res) {
 }
 
 async function getCourse(req, res) {
-  const product = await courseService.getCourseById(req.params.id);
-  if (!product)
-    return res.status(404).json({ message: "Produto não encontrado" });
-  res.json(product);
+  const course = await courseService.getCourseById(req.params.id);
+  if (!course)
+    return res.status(404).json({ message: "Curso não encontrado" });
+  res.json(course);
 }
 
-module.exports = { getCourses, getCourse };
+async function getCourseWithEnrollment(req, res) {
+  const course = await courseService.getCourseByEnrollment();
+  if (!course)
+    return res.status(404).json({ message: "Curso não encontrado" });
+  res.json(course);
+}
+
+
+module.exports = { getCourses, getCourse, getCourseWithEnrollment };

@@ -18,4 +18,7 @@ router.delete("/users/:id", usersController.removeUser);
 router.get("/courses", coursesController.getCourses);
 router.get("/courses/:id", coursesController.getCourse);
 
+// Enrollment
+router.get("/enrollment", coursesController.getCourseWithEnrollment);
+
 module.exports = router;
