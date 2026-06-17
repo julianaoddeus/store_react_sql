@@ -1,7 +1,7 @@
-import { useParams, Link } from "react-router";
+import { useParams, Link, useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, GraduationCap } from "lucide-react";
-
+import { toast } from "react-toastify";
 import { api } from "../services/api";
 
 import { useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import { selectAuth } from "../store/slices/auth_slice";
 import type { Courses } from "../types";
 
 import { formatCurrency } from "../utils";
+import { useCallback } from "react";
 
 const url = "http://localhost:3001/api";
 
@@ -19,6 +20,7 @@ interface ResponseSingleCourse {
 export function CourseDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useSelector(selectAuth);
+  const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery<ResponseSingleCourse>({
     queryKey: ["course", id, isAuthenticated],
@@ -30,6 +32,18 @@ export function CourseDetailPage() {
   });
 
   const course = data?.data;
+
+  const onSubscribe = useCallback(() => {
+    if (!course) return;
+
+    if (!isAuthenticated) {
+      toast.warn("Faça login para adicionar ao carrinho!");
+      return navigate("/login");
+    }
+   
+    
+    toast.success(`Inscrição no curso: ${course.name} realizada com sucesso!`);
+  }, [ course,  isAuthenticated, navigate]);
 
   if (isLoading) {
     return (
@@ -98,7 +112,8 @@ export function CourseDetailPage() {
 
           {/* Add to Cart Button */}
           {isAuthenticated ? (
-            <button className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg">
+            <button onClick={onSubscribe}
+            className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg">
               <GraduationCap className="w-6 h-6" />
               Fazer inscrição
             </button>

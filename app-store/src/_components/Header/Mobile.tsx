@@ -49,7 +49,7 @@ export function Mobile({
               Cursos
             </Link>
             <Link
-              to="/enrollment"
+              to="/courses/enrollment"
               className="text-gray-500 hover:text-pink-500 transition-colors"
             >
               Meus Cursos

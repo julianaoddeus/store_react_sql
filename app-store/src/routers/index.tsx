@@ -19,7 +19,7 @@ export const Routers = () => {
         <Route path="/courses/:id" element={<ProductDetailPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/enrollment" element={<EnrollmentPage />} />
+          <Route path="/courses/enrollment" element={<EnrollmentPage />} />
         </Route>
       </Route>
     </Routes>

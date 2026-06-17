@@ -33,8 +33,7 @@ export function Login() {
     },
     onSuccess: (data) => {
       dispatch(setCredentials({ user: data.user, token: data.jwt }));
-
-      console.log('data', data)
+    
       toast.success(`Bem-vindo de volta, ${data.user.username}!`);
       navigate(from, { replace: true });
     },
