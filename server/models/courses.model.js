@@ -17,8 +17,8 @@ const Courses = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    price: {
-      type: DataTypes.DECIMAL,
+    startDate: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
     stock: {
@@ -30,10 +30,6 @@ const Courses = sequelize.define(
       allowNull: true,
     },
   },
-  Course.hasMany(Enrollment, {
-    foreignKey: "courseId",
-    as: "enrollments",
-  }),
   {
     tableName: "courses",
     createdAt: "created_at",

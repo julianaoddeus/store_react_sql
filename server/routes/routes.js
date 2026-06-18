@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middlewares/auth");
 
 const authController = require("../controllers/authController");
 const usersController = require("../controllers/usersController");
@@ -12,14 +13,15 @@ router.post("/login", authController.login);
 // users
 router.get("/users", usersController.getUsers);
 router.post("/users", usersController.addUser);
-router.put("/users/:id", usersController.updateUser);
-router.delete("/users/:id", usersController.removeUser);
 
 // Courses
 router.get("/courses", coursesController.getCourses);
+router.get("/courses/enrollments/:userId", auth, coursesController.getCourseWithEnrollment);
 router.get("/courses/:id", coursesController.getCourse);
-router.get("/courses/enrollment", coursesController.getCourseWithEnrollment);
 
 // Enrollment
-router.get("/addEnrollment", enrollmentsController.createEnrollment);
+router.post("/enrollments/:id", auth, enrollmentsController.createEnrollment);
+router.post("/add", auth, enrollmentsController.createEnrollment);
+router.put("/update/:id", auth, enrollmentsController.updateEnrollment);
+
 module.exports = router;

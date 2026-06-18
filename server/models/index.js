@@ -1,17 +1,17 @@
-const Course = require("./Course");
-const Enrollment = require("./Enrollment");
+const Courses = require("./courses.model");
+const Enrollments = require("./enrollment.model");
 
-Course.hasMany(Enrollment, {
+Courses.hasMany(Enrollments, {
   foreignKey: "courseId",
   as: "enrollments",
 });
 
-Enrollment.belongsTo(Course, {
+Enrollments.belongsTo(Courses, {
   foreignKey: "courseId",
-  as: "course",
+  as: "courses",
 });
 
 module.exports = {
-  Course,
-  Enrollment,
+  Courses,
+  Enrollments,
 };

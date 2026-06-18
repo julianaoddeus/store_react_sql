@@ -24,7 +24,7 @@ export function Home() {
               Ver Cursos
             </Link>
             <Link
-              to="/enrollment"
+              to="/courses/enrollments"
               className="px-8 py-3 border-2 border-pink-400 text-pink-400 rounded-lg font-medium hover:text-pink-500 hover:border-pink-500 hover:bg-opacity-10  transition-colors"
             >
               Explorar Seus Cursos

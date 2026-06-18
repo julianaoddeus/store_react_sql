@@ -42,7 +42,7 @@ export function Desktop({
           Cursos
         </Link>
         <Link
-          to="/courses/enrollment"
+          to="/courses/enrollments/"
           className="text-gray-500 hover:text-pink-500 transition-colors"
         >
           Meus Cursos

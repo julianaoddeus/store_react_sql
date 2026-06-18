@@ -16,12 +16,17 @@ const User = sequelize.define(
     email: {
       type: DataTypes.TEXT,
       allowNull: false,
+      unique: true,
       validate: {
         isEmail: true,
       },
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    birthday: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
   },
@@ -32,7 +37,7 @@ const User = sequelize.define(
     indexes: [
       {
         unique: true,
-        fields: ["username", "email"],
+        fields: ["email"],
       },
     ],
   },

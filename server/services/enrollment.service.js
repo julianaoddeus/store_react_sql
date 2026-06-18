@@ -1,9 +1,13 @@
-const Enrollment = require("../models/enrollment.model");
+const Enrollments = require("../models/enrollment.model");
+
+async function getEnrollmentById(id) {
+  return Enrollments.findByPk(id);
+}
 
 async function addEnrollment(data) {
   const { userId, courseId } = data;
 
-  const exists = await Enrollment.findOne({
+  const exists = await Enrollments.findOne({
     where: {
       userId,
       courseId,
@@ -12,19 +16,30 @@ async function addEnrollment(data) {
   });
 
   if (exists) {
-    return res.status(400).json({
-      message: "Usuário já está matriculado neste curso",
-    });
+    throw new Error("Usuário já está matriculado neste curso");
   }
 
-  const enrollment = await Enrollment.create({
+  const enrollment = await Enrollments.create({
     userId,
     courseId,
     status: "ATIVO",
     enrolledAt: new Date(),
   });
+
+  return enrollment;
+}
+
+async function editEnrollment(id, data) {
+  await Enrollments.update(data, { where: { id } });
+  return Enrollments.findByPk(id);
+}
+
+async function deleteEnrollment(id) {
+  return Enrollments.destroy({ where: { id } });
 }
 
 module.exports = {
   addEnrollment,
+  deleteEnrollment,
+  editEnrollment,
 };

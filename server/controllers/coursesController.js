@@ -18,7 +18,8 @@ async function getCourse(req, res) {
 }
 
 async function getCourseWithEnrollment(req, res) {
-  const course = await courseService.getCourseByEnrollment();
+    const { userId } = req.params;
+  const course = await courseService.getCourseByEnrollment(userId);
   if (!course)
     return res.status(404).json({ message: "Curso não encontrado" });
   res.json(course);

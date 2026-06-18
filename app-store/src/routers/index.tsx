@@ -7,6 +7,7 @@ import Login from "../pages/login";
 import { Courses } from "../pages/courses";
 import ProductDetailPage from "../pages/courses-datails";
 import EnrollmentPage from "../pages/enrollment";
+import { MenuCancel } from "../_components/MenuCancel";
 
 export const Routers = () => {
   return (
@@ -19,7 +20,8 @@ export const Routers = () => {
         <Route path="/courses/:id" element={<ProductDetailPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/courses/enrollment" element={<EnrollmentPage />} />
+          <Route path="/courses/enrollments/" element={<EnrollmentPage />} />
+          <Route path="/enrollments/:id" element={<MenuCancel />} />
         </Route>
       </Route>
     </Routes>

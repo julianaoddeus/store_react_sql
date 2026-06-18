@@ -3,16 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, GraduationCap } from "lucide-react";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
-
 import { useSelector } from "react-redux";
 import { selectAuth } from "../store/slices/auth_slice";
-
-import type { Courses } from "../types";
-
-import { formatCurrency } from "../utils";
-import { useCallback } from "react";
-
-const url = "http://localhost:3001/api";
+import type {
+  Courses,
+  ResponseCoursesAndEnrollments,
+  Enrollments,
+} from "../types";
+import { useCallback, useState } from "react";
 
 interface ResponseSingleCourse {
   data: Courses;
@@ -25,7 +23,7 @@ export function CourseDetailPage() {
   const { data, isLoading, isError } = useQuery<ResponseSingleCourse>({
     queryKey: ["course", id, isAuthenticated],
     queryFn: async () => {
-      const { data } = await api.get(`${url}/courses/${id}`);
+      const { data } = await api.get(`/courses/${id}`);
       return { data };
     },
     enabled: !!id,
@@ -33,17 +31,49 @@ export function CourseDetailPage() {
 
   const course = data?.data;
 
-  const onSubscribe = useCallback(() => {
+  const [subscribing, setSubscribing] = useState(false);
+
+  const onSubscribe = useCallback(async () => {
     if (!course) return;
 
     if (!isAuthenticated) {
-      toast.warn("Faça login para adicionar ao carrinho!");
+      toast.warn("Faça login para se inscrever!");
       return navigate("/login");
     }
-   
-    
-    toast.success(`Inscrição no curso: ${course.name} realizada com sucesso!`);
-  }, [ course,  isAuthenticated, navigate]);
+    try {
+      setSubscribing(true);
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+      if (await validateEnrollments(user.id, course.id)) return;
+
+      await api.post(`/add`, { userId: user.id, courseId: course.id });
+
+      toast.success(`Inscrição em "${course.name}" realizada com sucesso!`);
+    } catch {
+      toast.error("Erro ao realizar inscrição. Tente novamente.");
+    } finally {
+      setSubscribing(false);
+    }
+  }, [course, isAuthenticated, navigate]);
+
+  const validateEnrollments = async (userId: string, courserId: string) => {
+    const response = await api.get(`/courses/enrollments/${userId}`);
+
+    if (!response?.data?.data.length) return;
+
+    const enrollments = response?.data?.data.flatMap(
+      (e: ResponseCoursesAndEnrollments) => e.enrollments ?? [],
+    );
+    const enrollment = enrollments.find(
+      (e: Enrollments) => e.courseId === courserId,
+    );
+
+    if (enrollment.status === "ATIVO")
+      return toast.warn("Você já está inscrito neste curso!");
+
+    if (enrollment.status === "CANCELADO")
+      return toast.warn("Você já cancelou este curso!");
+  };
 
   if (isLoading) {
     return (
@@ -106,14 +136,22 @@ export function CourseDetailPage() {
             {course?.description}
           </p>
 
-          <div className="text-3xl font-bold text-primary mb-8">
-            {formatCurrency(course?.price)}
+          <div className="text-primary hover:text-primarytext-sm mt-1 line-clamp-2 mb-6">
+            inicio do curso:{" "}
+            {new Date(course.startDate).toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
           </div>
 
           {/* Add to Cart Button */}
           {isAuthenticated ? (
-            <button onClick={onSubscribe}
-            className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg">
+            <button
+              onClick={onSubscribe}
+              disabled={subscribing}
+              className="flex items-center justify-center gap-2 w-full py-4 bg-primary text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+            >
               <GraduationCap className="w-6 h-6" />
               Fazer inscrição
             </button>

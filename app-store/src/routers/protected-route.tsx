@@ -10,7 +10,7 @@ export const ProtectedRoute = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      toast.warning("Você precisa fazer login para acessar esta página.", {
+      toast.warn("Você precisa fazer login para acessar esta página.", {
         toastId: "auth-warning",
       });
     }

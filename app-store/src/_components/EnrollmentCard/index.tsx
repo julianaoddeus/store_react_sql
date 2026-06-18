@@ -1,22 +1,24 @@
 import { memo } from "react";
 
-import type { Courses } from "../../types";
+import type { Courses, Enrollments } from "../../types";
 
 import { PlayCircle } from "lucide-react";
+import { MenuCancel } from "../MenuCancel";
 
 interface CourseProps {
   courses: Courses[];
+  enrollments: Enrollments[];
 }
 
-function EnrollmentCardComponent({ courses }: CourseProps) {
+function EnrollmentCardComponent({ courses, enrollments }: CourseProps) {
   const progress = 65; // %
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4 py-6">
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-4 py-6">
       {courses.map((course) => (
         <div
           key={course.id}
-          className="group flex flex-col bg-gray-900 rounded-xl overflow-hidden hover:bg-gray-800 transition-colors duration-200"
+          className="group relative flex flex-col bg-gray-900 rounded-xl hover:bg-gray-800 transition-colors duration-200"
         >
           {/* Thumbnail */}
           <div className="relative w-full aspect-video overflow-hidden bg-gray-800">
@@ -60,6 +62,26 @@ function EnrollmentCardComponent({ courses }: CourseProps) {
                 {course.name}
               </h3>
             </div>
+
+            {(() => {
+              const enrollment = enrollments.find(
+                (e) => e.courseId === course.id,
+              );
+              return (
+                <>
+                  {enrollment?.status && enrollment.status === "ATIVO" ? (
+                    <span className="ml-auto text-xs font-semibold px-2 py-0.5 rounded-full text-green-400">
+                      {enrollment?.status}
+                    </span>
+                  ) : (
+                    <span className="ml-auto text-xs font-semibold px-2 py-0.5 rounded-full  text-red-400">
+                      {enrollment?.status}
+                    </span>
+                  )}
+                  {enrollment ? <MenuCancel enrollment={enrollment} /> : null}
+                </>
+              );
+            })()}
           </div>
         </div>
       ))}

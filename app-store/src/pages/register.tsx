@@ -10,6 +10,7 @@ export function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [birthday, setBirthday] = useState("");
 
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -18,10 +19,11 @@ export function Register() {
 
   const registerMutation = useMutation({
     mutationFn: async () => {
-      const response = await api.post("http://localhost:3001/api/users/add", {
+      const response = await api.post("http://localhost:3001/api/users", {
         username,
         email,
         password,
+        birthday,
       });
       return response.data;
     },
@@ -37,7 +39,7 @@ export function Register() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!username || !email || !password || !confirmPassword) {
+    if (!username || !email || !password || !confirmPassword || !birthday) {
       toast.warn("Preencha todos os campos!");
       return;
     }
@@ -53,7 +55,6 @@ export function Register() {
     }
 
     registerMutation.mutate();
-    
   };
 
   return (
@@ -161,6 +162,20 @@ export function Register() {
                   className="w-full pl-10 pr-4 py-3 bg-transparent border border-muted rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                 />
               </div>
+            </div>
+            <div>
+              <label
+                htmlFor="birthday"
+                className="block text-sm font-medium text-gray-500 mb-2"
+              >
+                Data de Nascimento
+              </label>
+              <input
+                type="date"
+                value={birthday}
+                onChange={(e) => setBirthday(e.target.value)}
+                className="w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-2 text-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
             </div>
 
             {/* Botão Submit */}

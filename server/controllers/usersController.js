@@ -2,13 +2,11 @@ const userService = require("../services/user.service");
 
 async function getUsers(req, res) {
   const users = await userService.getAllUsers();
-  console.log("get", users);
   res.json(users);
 }
 
 async function addUser(req, res) {
   const user = await userService.createUser(req.body);
-  console.log("add", user);
   res.status(201).json(user);
 }
 

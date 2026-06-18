@@ -1,5 +1,5 @@
 export interface ResponseCourses {
-  data: Courses[];
+  data: ResponseCoursesAndEnrollments[];
   meta: {
     pagination: {
       page: number;
@@ -11,16 +11,16 @@ export interface ResponseCourses {
 }
 
 export interface Courses {
-  id: number;
+  id: string;
   name: string;
   description: string;
-  price: number;
+  startDate: string;
   stock: number;
   imageURL: string;
 }
 
 export interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
 }
@@ -43,10 +43,20 @@ export interface ResponseEnrollments {
 }
 
 export interface Enrollments {
-  id: number;
-  userId: number;
-  courseId: number;
+  id: string;
+  userId: string;
+  courseId: string;
   enrolledAt: Date;
-  status: "ATIVO" | "CANCELADO";
+  status: string;
   cancelledAt?: Date;
+}
+
+export interface ResponseCoursesAndEnrollments {
+  id: string;
+  name: string;
+  description: string;
+  startDate: string;
+  stock: number;
+  imageURL: string;
+  enrollments?: Enrollments[];
 }

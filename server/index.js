@@ -4,10 +4,8 @@ const cors = require("cors");
 const errorMiddleware = require("./middlewares/error");
 const sequelize = require("./config/database");
 
-require("./models/users.model");
+require("./models");
 const routes = require("./routes/routes");
-
-
 
 const app = express();
 const PORT = 3001;

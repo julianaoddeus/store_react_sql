@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const Courses = require("../models/courses.model");
+const Enrollments = require("../models/enrollment.model");
 
 async function getAllCourses({ page = 1, pageSize = 10, search = "" } = {}) {
   const offset = (page - 1) * pageSize;
@@ -13,7 +14,7 @@ async function getAllCourses({ page = 1, pageSize = 10, search = "" } = {}) {
     : {};
 
   const { count, rows } = await Courses.findAndCountAll({
-    where,
+    where: { startDate: { [Op.gt]: new Date() } },
     limit: pageSize,
     offset,
   });
@@ -36,17 +37,13 @@ async function getCourseById(id) {
 }
 
 async function getCourseByEnrollment(userId) {
-  return Course.findAndCountAll({
-    include: [
-      {
-        model: Enrollment,
-        as: "enrollments",
-        where: {
-          userId,
-        },
-      },
-    ],
+  const { count, rows } = await Courses.findAndCountAll({
+    include: [{ model: Enrollments, as: "enrollments", where: { userId } }],
   });
-}
 
+  return {
+    data: rows,
+    meta: { pagination: { total: count } },
+  };
+}
 module.exports = { getAllCourses, getCourseById, getCourseByEnrollment };

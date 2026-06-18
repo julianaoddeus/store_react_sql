@@ -22,11 +22,15 @@ class AuthenticationController {
         { id: user.id, email: user.email },
         process.env.JWT_SECRET,
         { expiresIn: "1d" },
-      );      
+      );
 
       res.json({
         token,
-        user: { id: user.id, username: user.username, email: user.email },
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
       });
     } catch (error) {
       console.error(error);

@@ -17,16 +17,18 @@ import type { ResponseCourses } from "../types";
 const EnrollmentPage = () => {
   const { isAuthenticated } = useSelector(selectAuth);
   const [showSuccess] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const { data } = useQuery<ResponseCourses>({
-    queryKey: ["enrollment", isAuthenticated],
+    queryKey: ["enrollments", isAuthenticated],
     queryFn: async () => {
-      const { data } = await api.get("/enrollment");
+      const { data } = await api.get(`/courses/enrollments/${user.id}`);
       return data;
     },
   });
 
   const items = data?.data ?? [];
+  const enrollments = data?.data?.flatMap((c) => c.enrollments ?? []) ?? [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -79,8 +81,10 @@ const EnrollmentPage = () => {
                 <GraduationCap className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">60</p>
-                <p className="text-sm text-muted-foreground">Total de aulas</p>
+                <p className="text-2xl font-bold text-foreground">0</p>
+                <p className="text-sm text-muted-foreground">
+                  Cursos concluídos
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4">
@@ -97,7 +101,7 @@ const EnrollmentPage = () => {
           </div>
 
           {/* Courses List */}
-          <EnrollmentCard courses={items} />
+          <EnrollmentCard courses={items} enrollments={enrollments} />
         </main>
       ) : (
         <div className="container mx-auto px-4 py-12">
