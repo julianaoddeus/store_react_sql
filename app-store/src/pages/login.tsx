@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "../store";
 import { useMutation } from "@tanstack/react-query";
@@ -25,15 +25,15 @@ export function Login() {
   const loginMutation = useMutation({
     mutationFn: async () => {
       const response = await api.post<AuthResponse>(`${url}/login`, {
-        email: identifier,
+        identifier,
         password,
       });
 
       return response.data;
     },
     onSuccess: (data) => {
-      dispatch(setCredentials({ user: data.user, token: data.jwt }));
-    
+      dispatch(setCredentials({ user: data.user, token: data.token }));
+
       toast.success(`Bem-vindo de volta, ${data.user.username}!`);
       navigate(from, { replace: true });
     },
@@ -42,7 +42,7 @@ export function Login() {
     },
   });
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {   
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIdentifier(e.target.value);
   };
 
@@ -83,19 +83,19 @@ export function Login() {
             {/* Campo Email */}
             <div>
               <label
-                htmlFor="email"
+                htmlFor="identifier"
                 className="block text-sm font-medium text-gray-500 mb-2"
               >
-                Email
+                Email ou usuário
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary" />
                 <input
-                  id="email"
-                  type="email"
-                  value={identifier}
+                  id="identifier"
+                  type="text"
+                  value={identifier.toLowerCase()}
                   onChange={handleEmailChange}
-                  placeholder="seu@email.com"
+                  placeholder="Email ou nome de usuário"
                   className="w-full pl-10 pr-4 py-3 bg-transparent border border-muted rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                 />
               </div>

@@ -26,7 +26,7 @@ export interface User {
 }
 
 export interface AuthResponse {
-  jwt: string;
+  token: string;
   user: User;
 }
 

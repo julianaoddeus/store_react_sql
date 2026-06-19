@@ -137,7 +137,7 @@ export function CourseDetailPage() {
           </p>
 
           <div className="text-primary hover:text-primarytext-sm mt-1 line-clamp-2 mb-6">
-            inicio do curso:{" "}
+            início do curso:{" "}
             {new Date(course.startDate).toLocaleDateString("pt-BR", {
               day: "2-digit",
               month: "2-digit",

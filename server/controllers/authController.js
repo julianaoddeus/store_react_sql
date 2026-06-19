@@ -6,9 +6,11 @@ const User = require("../models/users.model");
 class AuthenticationController {
   static async login(req, res) {
     try {
-      const { email, password } = req.body;
+      const { identifier, password } = req.body;
 
-      const user = await User.findOne({ where: { email } });
+      const user = await User.findOne({
+        where: identifier.includes("@") ? { email: identifier } : { username: identifier },
+      });
 
       if (!user)
         return res.status(401).json({ message: "Credenciais inválidas" });
@@ -19,7 +21,7 @@ class AuthenticationController {
         return res.status(401).json({ message: "Credenciais inválidas" });
 
       const token = jwt.sign(
-        { id: user.id, email: user.email },
+        { id: user.id, email: user.email, username: user.username },
         process.env.JWT_SECRET,
         { expiresIn: "1d" },
       );
