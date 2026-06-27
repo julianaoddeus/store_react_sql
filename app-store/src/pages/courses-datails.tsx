@@ -46,7 +46,7 @@ export function CourseDetailPage() {
 
       if (await validateEnrollments(user.id, course.id)) return;
 
-      await api.post(`/add`, { userId: user.id, courseId: course.id });
+      await api.post(`/enrollments`, { userId: user.id, courseId: course.id });
 
       toast.success(`Inscrição em "${course.name}" realizada com sucesso!`);
       return navigate("/courses/enrollments");

@@ -21,7 +21,7 @@ router.get("/courses/:id", coursesController.getCourse);
 
 // Enrollment
 router.post("/enrollments/:id", auth, enrollmentsController.createEnrollment);
-router.post("/add", auth, enrollmentsController.createEnrollment);
-router.put("/update/:id", auth, enrollmentsController.updateEnrollment);
+router.post("/enrollments", auth, enrollmentsController.createEnrollment);
+router.put("/enrollments/:id", auth, enrollmentsController.updateEnrollment);
 
 module.exports = router;
