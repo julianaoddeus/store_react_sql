@@ -1,7 +1,7 @@
 import axios from "axios";
 import { logout } from "../store/slices/auth_slice";
 
-export const HOST_API = "http://localhost:3001";
+export const HOST_API = import.meta.env.VITE_API_URL;
 
 export const api = axios.create({
   baseURL: `${HOST_API}/api`,
