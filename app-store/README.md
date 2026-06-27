@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# app-store
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend da plataforma de cursos, construído com React + TypeScript + Vite.
 
-Currently, two official plugins are available:
+## Tecnologias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** + **TypeScript**
+- **Vite** — build e dev server
+- **React Router v7** — roteamento
+- **Redux Toolkit** — gerenciamento de estado (auth)
+- **TanStack Query** — requisições e cache
+- **Axios** — cliente HTTP
+- **Tailwind CSS** — estilização
+- **MUI** — componentes de UI
+- **React Toastify** — notificações
 
-## React Compiler
+## Estrutura
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── _components/    # componentes reutilizáveis
+├── hooks/          # hooks customizados
+├── lib/            # configurações (ex: queryClient)
+├── pages/          # páginas da aplicação
+├── routers/        # definição de rotas
+├── services/       # instância do axios e interceptors
+├── store/          # Redux store e slices
+└── types/          # tipos TypeScript
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Páginas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Rota | Página | Autenticação |
+|------|--------|--------------|
+| `/` | Home | Não |
+| `/login` | Login | Não |
+| `/register` | Cadastro | Não |
+| `/courses` | Lista de cursos | Não |
+| `/courses/:id` | Detalhes do curso | Não |
+| `/enrollments` | Minhas matrículas | Sim |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Autenticação
+
+O JWT é recebido do backend no login e armazenado no `localStorage`. O interceptor do Axios o envia automaticamente no header `Authorization: Bearer <token>` em todas as requisições. Em caso de resposta `401`, o usuário é deslogado automaticamente.
+
+## Instalação e uso
+
+```bash
+npm install
+npm run dev
 ```
+
+A aplicação roda em `http://localhost:5173` e consome a API em `http://localhost:3001/api`.
