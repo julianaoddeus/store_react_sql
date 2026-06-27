@@ -36,6 +36,7 @@ export function MenuCancel({ enrollment }: MenuCancelProps) {
       });
 
       toast.success("Inscrição cancelada com sucesso!");
+      window.location.reload();
     } catch {
       toast.error("Erro ao cancelar inscrição. Tente novamente.");
     }

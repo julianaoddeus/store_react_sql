@@ -49,6 +49,7 @@ export function CourseDetailPage() {
       await api.post(`/add`, { userId: user.id, courseId: course.id });
 
       toast.success(`Inscrição em "${course.name}" realizada com sucesso!`);
+      return navigate("/courses/enrollments");
     } catch {
       toast.error("Erro ao realizar inscrição. Tente novamente.");
     } finally {
@@ -60,11 +61,10 @@ export function CourseDetailPage() {
     const response = await api.get(`/courses/enrollments/${userId}`);
 
     if (!response?.data?.data.length) return;
-
     const enrollments = response?.data?.data.flatMap(
       (e: ResponseCoursesAndEnrollments) => e.enrollments ?? [],
     );
-    const enrollment = enrollments.find(
+    const enrollment = enrollments.flatMap(
       (e: Enrollments) => e.courseId === courserId,
     );
 
