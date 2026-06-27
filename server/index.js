@@ -8,9 +8,17 @@ require("./models");
 const routes = require("./routes/routes");
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173", // React/Vite local
+      "https://store-react-sql.onrender.com", // URL da Vercel
+    ],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.use("/api", routes);
