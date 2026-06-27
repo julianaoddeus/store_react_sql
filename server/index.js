@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", // React/Vite local
-      "https://tinystore.netlify.app/", // URL da netlify
+      "https://tinystore.netlify.app", // URL da netlify
     ],
     credentials: true,
   }),
