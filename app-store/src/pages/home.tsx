@@ -56,10 +56,10 @@ export function Home() {
                 <Tag className="w-8 h-8 text-accent text-orange-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-500 mb-2">
-                Melhores Preços
+                As melhores qualificações do mercado
               </h3>
               <p className="text-secondary">
-                Oferecemos preços competitivos e promoções exclusivas.
+                Oferecemos qualificações competitivas.
               </p>
             </div>
             <div className="flex flex-col items-center text-center p-6">
@@ -122,9 +122,9 @@ export function Home() {
             O que esperar?
           </h2>
           <p className="text-secondary text-center mb-8 max-w-2xl mx-auto">
-            A proposta dos cursos de React é te guiar passo a passo na
-            construções de aplicações completas. Você aprenderá a desenvolver
-            aplicações do absoluto zero utilizando ferramentas como TailwindCss,
+            A proposta da plataforma é te guiar passo a passo na construções de
+            aplicações completas. Você aprenderá a desenvolver aplicações do
+            absoluto zero utilizando ferramentas como TailwindCss,
             Styled-Components, Vite, Firebase, Typescript e muito mais.
           </p>
         </div>
