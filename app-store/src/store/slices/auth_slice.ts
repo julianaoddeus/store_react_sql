@@ -11,10 +11,22 @@ interface AuthState {
 const savedUser = localStorage.getItem("user");
 const savedToken = localStorage.getItem("token");
 
+const isTokenValid = (token: string | null): boolean => {
+  if (!token) return false;
+  try {
+    const { exp } = JSON.parse(atob(token.split(".")[1]));
+    return exp * 1000 > Date.now();
+  } catch {
+    return false;
+  }
+};
+
+const tokenValid = isTokenValid(savedToken);
+
 const initialState: AuthState = {
-  isAuthenticated: !!savedToken,
-  token: savedToken || undefined,
-  user: savedUser ? JSON.parse(savedUser) : undefined,
+  isAuthenticated: tokenValid,
+  token: tokenValid ? savedToken || undefined : undefined,
+  user: tokenValid && savedUser ? JSON.parse(savedUser) : undefined,
 };
 
 const authSlice = createSlice({
@@ -39,8 +51,10 @@ const authSlice = createSlice({
       state.token = undefined;
       state.isAuthenticated = false;
 
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      if (!tokenValid) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
     },
   },
 });
