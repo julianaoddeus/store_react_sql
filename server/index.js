@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", // React/Vite local
-      "https://store-react-sql-g93v.vercel.app", // URL da Vercel
+      "https://tinystore.netlify.app/", // URL da netlify
     ],
     credentials: true,
   }),

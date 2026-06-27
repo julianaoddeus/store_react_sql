@@ -1,7 +1,6 @@
 import axios from "axios";
 import { logout } from "../store/slices/auth_slice";
 
-//varial de ambiente
 export const HOST_API = import.meta.env.VITE_API_URL;
 
 export const api = axios.create({
