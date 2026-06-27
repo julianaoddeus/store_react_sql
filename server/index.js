@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", // React/Vite local
-      "https://store-react-sql.onrender.com", // URL da Vercel
+      "https://store-react-sql-g93v.vercel.app", // URL da Vercel
     ],
     credentials: true,
   }),
