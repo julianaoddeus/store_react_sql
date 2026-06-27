@@ -60,19 +60,28 @@ export function CourseDetailPage() {
   const validateEnrollments = async (userId: string, courserId: string) => {
     const response = await api.get(`/courses/enrollments/${userId}`);
 
-    if (!response?.data?.data.length) return;
+    if (!response?.data?.data.length) return false;
     const enrollments = response?.data?.data.flatMap(
       (e: ResponseCoursesAndEnrollments) => e.enrollments ?? [],
     );
-    const enrollment = enrollments.flatMap(
+    
+    const enrollment = enrollments.find(
       (e: Enrollments) => e.courseId === courserId,
     );
 
-    if (enrollment.status === "ATIVO")
-      return toast.warn("Você já está inscrito neste curso!");
+    if (!enrollment) return false;
 
-    if (enrollment.status === "CANCELADO")
-      return toast.warn("Você já cancelou este curso!");
+    if (enrollment.status === "ATIVO") {
+      toast.warn("Você já está inscrito neste curso!");
+      return true;
+    }
+
+    if (enrollment.status === "CANCELADO") {
+      toast.warn("Você já cancelou este curso!");
+      return true;
+    }
+
+    return false;
   };
 
   if (isLoading) {

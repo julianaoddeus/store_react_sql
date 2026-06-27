@@ -7,17 +7,13 @@ async function getEnrollmentById(id) {
 async function addEnrollment(data) {
   const { userId, courseId } = data;
 
-  const exists = await Enrollments.findOne({
-    where: {
-      userId,
-      courseId,
-      status: "ATIVO",
-    },
-  });
+  const exists = await Enrollments.findOne({ where: { userId, courseId } });
 
-  if (exists) {
+  if (exists?.status === "ATIVO")
     throw new Error("Usuário já está matriculado neste curso");
-  }
+
+  if (exists?.status === "CANCELADO")
+    throw new Error("Usuário já cancelou este curso e não pode se inscrever novamente");
 
   const enrollment = await Enrollments.create({
     userId,

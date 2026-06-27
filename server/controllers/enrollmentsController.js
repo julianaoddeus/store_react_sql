@@ -17,7 +17,8 @@ async function createEnrollment(req, res) {
 
     res.status(201).json(enrollment);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    const status = err.message.includes("matriculado") || err.message.includes("cancelou") ? 409 : 500;
+    res.status(status).json({ message: err.message });
   }
 }
 
