@@ -30,7 +30,7 @@ export function MenuCancel({ enrollment }: MenuCancelProps) {
     }
 
     try {
-      await api.put(`update/${enrollment?.id}`, {
+      await api.put(`/update/${enrollment?.id}`, {
         status: "CANCELADO",
         cancelledAt: new Date(),
       });
