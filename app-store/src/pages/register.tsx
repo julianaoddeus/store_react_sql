@@ -16,10 +16,9 @@ export function Register() {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
-
   const registerMutation = useMutation({
     mutationFn: async () => {
-      const response = await api.post("http://localhost:3001/api/users", {
+      const response = await api.post(`/users`, {
         username,
         email,
         password,

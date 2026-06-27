@@ -15,8 +15,6 @@ export function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   const location = useLocation();
-  const url = "http://localhost:3001/api";
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -24,7 +22,7 @@ export function Login() {
 
   const loginMutation = useMutation({
     mutationFn: async () => {
-      const response = await api.post<AuthResponse>(`${url}/login`, {
+      const response = await api.post<AuthResponse>(`/login`, {
         identifier,
         password,
       });

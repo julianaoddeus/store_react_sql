@@ -19,13 +19,13 @@ export function Courses() {
   const { data, isLoading, isError } = useQuery<ResponseCourses>({
     queryKey: ["courses", page, debouncedSearch],
     queryFn: async () => {
-      let url = `http://localhost:3001/api/courses?page=${page}&pageSize=${pageSize}`;
+      let url = `/courses?page=${page}&pageSize=${pageSize}`;
 
       if (debouncedSearch) {
         url += `&search=${debouncedSearch}`;
       }
 
-      const { data } = await api.get(url);    
+      const { data } = await api.get(url);
       return data;
     },
 
