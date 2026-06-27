@@ -51,10 +51,8 @@ const authSlice = createSlice({
       state.token = undefined;
       state.isAuthenticated = false;
 
-      if (!tokenValid) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-      }
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     },
   },
 });
