@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { Op } = require("sequelize");
 
 const User = require("../models/users.model");
 
@@ -9,7 +10,9 @@ class AuthenticationController {
       const { identifier, password } = req.body;
 
       const user = await User.findOne({
-        where: identifier.includes("@") ? { email: identifier } : { username: identifier },
+        where: identifier.includes("@")
+          ? { email: identifier }
+          : { username: { [Op.iLike]: identifier } },
       });
 
       if (!user)
