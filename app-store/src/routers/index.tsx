@@ -20,7 +20,7 @@ export const Routers = () => {
         <Route path="/courses/:id" element={<ProductDetailPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/courses/enrollments/" element={<EnrollmentPage />} />
+          <Route path="/courses/enrollments" element={<EnrollmentPage />} />
           <Route path="/enrollments/:id" element={<MenuCancel />} />
         </Route>
       </Route>
